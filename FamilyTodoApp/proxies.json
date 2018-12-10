@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json.schemastore.org/proxies",
+  "proxies": {
+    "proxyHomePage": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/"
+      },
+      "backendUri": "https://familytodoapp.blob.core.windows.net/website/index.html"
+    },
+    "proxyContent": {
+      "matchCondition": {
+        "methods": [ "GET" ],
+        "route": "/content/{*restOfPath}"
+      },
+      "backendUri": "https://familytodoapp.blob.core.windows.net/website/content/{restOfPath}"
+    }
+  }
+}
