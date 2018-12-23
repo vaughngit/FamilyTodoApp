@@ -5,6 +5,7 @@ using System.Text;
 
 namespace TodoApi
 {
+    //Todo non-persistent .net data model 
     public class Todo
     {
         public string Id { get; set; } = Guid.NewGuid().ToString("n");
@@ -13,22 +14,27 @@ namespace TodoApi
         public string AssignedTo { get; set; }
         public bool IsStarted { get; set; }
         public bool IsCompleted { get; set; }
+        public DateTime IsDue { get; set; } = DateTime.UtcNow; 
     }
 
+    // Fields exposed to end-user when creating a Todo object
     public class TodoCreateModel
     {
         public string TaskDescription { get; set; }
         public string AssignedTo { get; set; }
     }
 
+    // Fields exposed to end-device when updating Todo object
     public class TodoUpdateModel
     {
         public string TaskDescription { get; set; }
         public bool IsStarted { get; set; }
         public bool IsCompleted { get; set; }
         public string AssignedTo { get; set; }
+        public DateTime IsDue { get; set; }
     }
 
+    // Azure Table Storage data model 
     public class TodoTableEntity : TableEntity
     {
         public DateTime CreatedTime { get; set; }
@@ -36,10 +42,13 @@ namespace TodoApi
         public string AssignedTo { get; set; }
         public bool IsStarted { get; set; }
         public bool IsCompleted { get; set; }
+        public DateTime IsDue { get; set; }
     }
 
+    // Todo persist storage converstion: 
     public static class Mappings
     {
+        // Convert Todo to Azure Table Storage Format
         public static TodoTableEntity ToTableEntity(this Todo todo)
         {
             return new TodoTableEntity()
@@ -50,11 +59,13 @@ namespace TodoApi
                 IsStarted = todo.IsStarted,
                 IsCompleted = todo.IsCompleted,
                 TaskDescription = todo.TaskDescription,
-                AssignedTo = todo.AssignedTo
+                AssignedTo = todo.AssignedTo,
+                IsDue = todo.IsDue
             };
 
         }
 
+        // Convert Todo from Azure Table Storage
         public static Todo ToTodo(this TodoTableEntity todo)
         {
             return new Todo()
@@ -64,7 +75,8 @@ namespace TodoApi
                 IsStarted = todo.IsStarted,
                 IsCompleted = todo.IsCompleted,
                 TaskDescription = todo.TaskDescription,
-                AssignedTo = todo.AssignedTo
+                AssignedTo = todo.AssignedTo,
+                IsDue = todo.IsDue
             };
         }
     }

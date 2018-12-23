@@ -83,7 +83,7 @@ namespace TodoApi
             var existingRow = (TodoTableEntity)findResult.Result;
             existingRow.IsCompleted = updated.IsCompleted;  // if found update the row with the http request
             existingRow.IsStarted = updated.IsStarted;
-    
+            existingRow.IsDue = updated.IsDue;
 
             if (!string.IsNullOrEmpty(updated.TaskDescription))
             {
