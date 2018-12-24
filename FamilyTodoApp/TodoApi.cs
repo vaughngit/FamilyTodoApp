@@ -31,7 +31,7 @@ namespace TodoApi
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var input = JsonConvert.DeserializeObject<TodoCreateModel>(requestBody);
 
-            var todo = new Todo() { TaskDescription = input.TaskDescription, AssignedTo = input.AssignedTo };
+            var todo = new Todo() { TaskDescription = input.TaskDescription, AssignedTo = input.AssignedTo, IsDue = input.IsDue };
             //items.Add(todo);  // remove this as we are no longer adding the todo item to an in memory list
             await todoTable.AddAsync(todo.ToTableEntity());  //Convertes the item into a ToTableEntity using the mapping method the model class and adds it to tablestorage table
             await todoQueue.AddAsync(todo); // send the todo item to the queue
@@ -83,7 +83,7 @@ namespace TodoApi
             var existingRow = (TodoTableEntity)findResult.Result;
             existingRow.IsCompleted = updated.IsCompleted;  // if found update the row with the http request
             existingRow.IsStarted = updated.IsStarted;
-            existingRow.IsDue = updated.IsDue;
+       
 
             if (!string.IsNullOrEmpty(updated.TaskDescription))
             {
@@ -94,6 +94,12 @@ namespace TodoApi
             {
                 existingRow.AssignedTo = updated.AssignedTo; //if found update the row with the http request
             }
+
+            if (updated.IsDue > DateTime.MinValue) 
+            {
+                existingRow.IsDue = updated.IsDue;
+            }
+
 
             var replaceOperation = TableOperation.Replace(existingRow);
             await todoTable.ExecuteAsync(replaceOperation); // replace the previous row with the updated row

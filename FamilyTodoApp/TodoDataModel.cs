@@ -22,6 +22,7 @@ namespace TodoApi
     {
         public string TaskDescription { get; set; }
         public string AssignedTo { get; set; }
+        public DateTime IsDue { get; set; }
     }
 
     // Fields exposed to end-device when updating Todo object
