@@ -9,12 +9,12 @@ namespace TodoApi
     public class Todo
     {
         public string Id { get; set; } = Guid.NewGuid().ToString("n");
-        public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedTime { get; set; } = DateTime.Today;
         public string TaskDescription { get; set; }
         public string AssignedTo { get; set; }
         public bool IsStarted { get; set; }
         public bool IsCompleted { get; set; }
-        public DateTime IsDue { get; set; } = DateTime.UtcNow; 
+        public DateTime IsDue { get; set; } = DateTime.Today; 
     }
 
     // Fields exposed to end-user when creating a Todo object
