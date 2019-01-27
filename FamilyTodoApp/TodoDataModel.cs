@@ -14,7 +14,7 @@ namespace TodoApi
         public string AssignedTo { get; set; }
         public bool IsStarted { get; set; }
         public bool IsCompleted { get; set; }
-        public DateTime IsDue { get; set; } = DateTime.Today; 
+        public DateTime IsDue { get; set; } = DateTime.UtcNow; 
     }
 
     // Fields exposed to end-user when creating a Todo object
